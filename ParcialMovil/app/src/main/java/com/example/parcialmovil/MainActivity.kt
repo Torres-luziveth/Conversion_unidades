@@ -17,8 +17,7 @@ class MainActivity : AppCompatActivity() {
         val etNombre = findViewById<EditText>(R.id.etFirstName)
         val etApellido = findViewById<EditText>(R.id.etLastName)
         val etCorreo = findViewById<EditText>(R.id.etEmail)
-        val etContrasena = findViewById<EditText>(R.id.etPassword)
-        val etConfirmar = findViewById<EditText>(R.id.etConfirmPassword)
+        val etContraseña = findViewById<EditText>(R.id.etPassword)
         val btnRegistrar = findViewById<Button>(R.id.btnRegister)
 
         btnRegistrar.setOnClickListener {
@@ -26,28 +25,40 @@ class MainActivity : AppCompatActivity() {
             val nombre = etNombre.text.toString().trim()
             val apellido = etApellido.text.toString().trim()
             val correo = etCorreo.text.toString().trim()
-            val contrasena = etContrasena.text.toString().trim()
-            val confirmar = etConfirmar.text.toString().trim()
+            val contraseña = etContraseña.text.toString().trim()
 
-            if (nombre.isNotEmpty() && apellido.isNotEmpty() &&
-                correo.isNotEmpty() && contrasena.isNotEmpty() && confirmar.isNotEmpty()) {
+            var esValido = true
 
-                if (contrasena == confirmar) {
-
-                    Toast.makeText(this, "Registro exitoso 👌", Toast.LENGTH_SHORT).show()
-
-                    val intent = Intent(this, ConverterActivity::class.java)
-                    intent.putExtra("nombreUsuario", nombre)
-                    startActivity(intent)
-                    finish()
-
-                } else {
-                    Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-                }
-
-            } else {
-                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+            if (nombre.isEmpty()) {
+                etNombre.error = "Ingrese su nombre"
+                esValido = false
             }
+
+            if (apellido.isEmpty()) {
+                etApellido.error = "Ingrese su apellido"
+                esValido = false
+            }
+
+            if (correo.isEmpty()) {
+                etCorreo.error = "Ingrese su correo"
+                esValido = false
+            }
+
+            if (contraseña.isEmpty()) {
+                etContraseña.error = "Ingrese su contraseña"
+                esValido = false
+            }
+
+            if (!esValido) {
+                Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Si todo está correcto
+            val intent = Intent(this, ConverterActivity::class.java)
+            intent.putExtra("nombreUsuario", nombre)
+            startActivity(intent)
+            finish()
         }
     }
 }
